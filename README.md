@@ -1,27 +1,4 @@
-How to build PlatformIO based project
-=====================================
+### Evidências
 
-1. [Install PlatformIO Core](https://docs.platformio.org/page/core.html)
-2. Download [development platform with examples](https://github.com/platformio/platform-freescalekinetis/archive/develop.zip)
-3. Extract ZIP archive
-4. Run these commands:
+https://github.com/user-attachments/assets/b6735b23-a6a6-4f8b-9615-2b6446256768
 
-```shell
-# Change directory to example
-$ cd platform-freescalekinetis/examples/zephyr-blink
-
-# Build project
-$ pio run
-
-# Upload firmware
-$ pio run --target upload
-
-# Build specific environment
-$ pio run -e frdm_k64f
-
-# Upload firmware for the specific environment
-$ pio run -e frdm_k64f --target upload
-
-# Clean build files
-$ pio run --target clean
-```
