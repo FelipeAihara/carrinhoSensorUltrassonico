@@ -8,26 +8,40 @@
 #define INPUT_PORT DT_NODELABEL(gpiob)
 #define INPUT_PIN 0
 
-const struct device *input_dev;
-input_dev = DEVICE_DT_GET(INPUT_PORT);
-volatile uint16_t t_subida = 0;
-volatile uint16_t t_descida = 0;
-volatile uint16_t t = 0; 
+volatile uint16_t tick_subida = 0;
+volatile uint16_t tick_descida = 0;
+volatile uint16_t tick = 0;
+volatile float t = 0; // tempo que o pulso ficou ativo em microssegundos
+volatile float dist = 0; // distancia em cm
 
-__ramfunc int16_t tpm1_isr(void *arg) {
+
+__ramfunc void tpm1_isr(void *arg) {
     TPM1->STATUS |= TPM_STATUS_CH0F_MASK; // zerra a flag que gerou a interrupção
-    if (gpio_pin_get(input_dev, INPUT_PIN) == 1) {
-        t_subida = TPM1->CONTROLS[0].CnV;
-        return 0;
+    if ((PTB->PDIR & 1) == 1) {
+        tick_subida = TPM1->CONTROLS[0].CnV;
+        return;
     }
     else {
-        t_descida = TPM1->CONTROLS[0].CnV;
+        tick_descida = TPM1->CONTROLS[0].CnV;
+        if (tick_descida > tick_subida) {
+            tick = tick_descida - tick_subida;
+            t = tick / 3;
+            dist = t * 0.017;
+        }
+        else {
+            tick = 65536 - (tick_subida - tick_descida);
+            t = tick / 3;
+            dist = t * 0.017;
+        }
     }
 }
+
 
 int main(void)
 {
     // Configura a porta B0 como input
+    const struct device *input_dev;
+    input_dev = DEVICE_DT_GET(INPUT_PORT);
     gpio_pin_configure(input_dev, INPUT_PIN, GPIO_INPUT);
 
     // Conecta a interrupção via Zephyr
@@ -35,7 +49,7 @@ int main(void)
     irq_enable(TPM_IRQ_LINE);
 
     // Inicializa TPM1 e TPM0 com módulo e prescaler desejado
-    pwm_tpm_Init(TPM1, TPM_PLLFLL, 65535, TPM_CLK, PS_128, EDGE_PWM);
+    pwm_tpm_Init(TPM1, TPM_PLLFLL, 65535, TPM_CLK, PS_16, EDGE_PWM);
     pwm_tpm_Init(TPM0, TPM_PLLFLL, 960, TPM_CLK, PS_1, EDGE_PWM);
 
     // Configura TPM1_CH0 como input capture na borda de subida
@@ -46,8 +60,13 @@ int main(void)
     while (1)
     {
         //int temp =  gpio_pin_get(input_dev, INPUT_PIN);
+        //int temp2 = PTB->PDIR & 1;
         //printk("Temp = %d\n", temp);
-        //printk("Valor do TPM1: %u\n", captured);
-        k_msleep(1000); 
+        //printk("Temp2 = %d\n", temp2);
+        //printk("subida: %u\n", tick_subida);
+        //printk("descida: %u\n", tick_descida);
+        printk("Distancia em cm = %.1f\n", dist);
+        k_msleep(1000);
+        //k_sleep(K_FOREVER); 
     }
 }
