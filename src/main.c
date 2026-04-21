@@ -59,14 +59,7 @@ int main(void)
 
     while (1)
     {
-        //int temp =  gpio_pin_get(input_dev, INPUT_PIN);
-        //int temp2 = PTB->PDIR & 1;
-        //printk("Temp = %d\n", temp);
-        //printk("Temp2 = %d\n", temp2);
-        //printk("subida: %u\n", tick_subida);
-        //printk("descida: %u\n", tick_descida);
         printk("Distancia em cm = %.1f\n", dist);
         k_msleep(1000);
-        //k_sleep(K_FOREVER); 
     }
 }
