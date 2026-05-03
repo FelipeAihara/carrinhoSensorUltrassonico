@@ -10,7 +10,6 @@
             "includePath": [
                 "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/include",
                 "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/src",
-                "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/lib/sensor-ultrassonico",
                 "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/lib/pwm",
                 "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/.pio/build/frdm_kl25z/zephyr/include/generated/zephyr",
                 "C:/Users/fyaih/.platformio/packages/framework-zephyr/include",
@@ -26,6 +25,7 @@
                 "C:/Users/fyaih/.platformio/packages/framework-zephyr/_pio/modules/hal/nxp/mcux/mcux-sdk-ng/drivers/common",
                 "C:/Users/fyaih/.platformio/packages/framework-zephyr/_pio/modules/hal/nxp/mcux/mcux-sdk-ng/drivers/lpsci",
                 "C:/Users/fyaih/.platformio/packages/framework-zephyr/_pio/modules/hal/nxp/mcux/mcux-sdk-ng/drivers/port",
+                "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/lib/sensor-ultrassonico",
                 ""
             ],
             "browse": {
@@ -33,7 +33,6 @@
                 "path": [
                     "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/include",
                     "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/src",
-                    "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/lib/sensor-ultrassonico",
                     "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/lib/pwm",
                     "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/.pio/build/frdm_kl25z/zephyr/include/generated/zephyr",
                     "C:/Users/fyaih/.platformio/packages/framework-zephyr/include",
@@ -49,6 +48,7 @@
                     "C:/Users/fyaih/.platformio/packages/framework-zephyr/_pio/modules/hal/nxp/mcux/mcux-sdk-ng/drivers/common",
                     "C:/Users/fyaih/.platformio/packages/framework-zephyr/_pio/modules/hal/nxp/mcux/mcux-sdk-ng/drivers/lpsci",
                     "C:/Users/fyaih/.platformio/packages/framework-zephyr/_pio/modules/hal/nxp/mcux/mcux-sdk-ng/drivers/port",
+                    "C:/Users/fyaih/Documents/PlatformIO/Projects/carrinhoSensorUltrassonico/lib/sensor-ultrassonico",
                     ""
                 ]
             },

@@ -5,8 +5,9 @@
 
 #define TPM_IRQ_LINE TPM1_IRQn  // relaciona a interrupção ao timer TPM1
 #define TPM_IRQ_PRIORITY 1      // define a prioridade da interrupção
-#define INPUT_PORT DT_NODELABEL(gpiob)
-#define INPUT_PIN 0
+#define B_PORT DT_NODELABEL(gpiob)
+#define ECHO_PIN 0
+#define TRIGGER_PIN 2
 
 extern volatile uint16_t tick_subida;
 extern volatile uint16_t tick_descida;
@@ -16,4 +17,5 @@ extern volatile float dist; // distancia em cm
 
 __ramfunc void tpm1_isr(void *arg);
 void sensorUltrassonicoInit(void);
+float calculaDistancia(void);
 

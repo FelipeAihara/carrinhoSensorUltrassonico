@@ -9,6 +9,7 @@
 
 
 int main(void) {
+    float distancia;
     sensorUltrassonicoInit();
 
     // Configura os motores
@@ -19,7 +20,11 @@ int main(void) {
     pwm_tpm_Ch_Init(TPM0, 5, TPM_PWM_H,GPIOD,5);
 
     while (1) {
-        if (dist > 25) {
+        distancia = calculaDistancia();
+        printk("Distancia: %f\n", distancia);
+        k_msleep(1000); 
+
+        if (distancia > 25) {
             pwm_tpm_CnV(TPM0, 3, 700);
             pwm_tpm_CnV(TPM0, 2, 0);
             pwm_tpm_CnV(TPM0, 0, 700);
