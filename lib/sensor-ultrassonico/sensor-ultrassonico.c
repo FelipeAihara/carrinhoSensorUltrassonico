@@ -3,6 +3,7 @@
 volatile uint16_t tick_subida = 0;
 volatile uint16_t tick_descida = 0;
 volatile uint16_t tick = 0;
+volatile bool espera = true;
 volatile float t = 0; // tempo que o pulso ficou ativo em microssegundos
 volatile float dist = 0; // distancia em cm
 const struct device *port_b = DEVICE_DT_GET(B_PORT);
@@ -15,16 +16,7 @@ __ramfunc void tpm1_isr(void *arg) {
     }
     else {
         tick_descida = TPM1->CONTROLS[0].CnV;
-        if (tick_descida > tick_subida) {
-            tick = tick_descida - tick_subida;
-            t = tick / 3;
-            dist = t * 0.017f;
-        }
-        else {
-            tick = 65536 - (tick_subida - tick_descida);
-            t = tick / 3;
-            dist = t * 0.017f;
-        }
+        espera = false;
     }
 }
 
@@ -41,19 +33,33 @@ void sensorUltrassonicoInit(void) {
 
     // Inicializa TPM1 e TPM0 com módulo e prescaler desejado
     pwm_tpm_Init(TPM1, TPM_PLLFLL, 65535, TPM_CLK, PS_16, EDGE_PWM);
-    //pwm_tpm_Init(TPM2, TPM_PLLFLL, 960, TPM_CLK, PS_1, EDGE_PWM);
 
     // Configura TPM1_CH0 como input capture na borda de subida
     pwm_tpm_Ch_Init(TPM1, 0, TPM_INPUT_CAPTURE_BOTH | TPM_CHANNEL_INTERRUPT, GPIOB, 0);
-    //pwm_tpm_Ch_Init(TPM2, 0, TPM_PWM_H, GPIOB, 2);
-    //pwm_tpm_CnV(TPM2, 0, 480);
 }
 
-float calculaDistancia(void) {
+void trigger(void) {
     gpio_pin_set(port_b, TRIGGER_PIN, 0);
     k_busy_wait(2);
     gpio_pin_set(port_b, TRIGGER_PIN, 1);
     k_busy_wait(10);
     gpio_pin_set(port_b, TRIGGER_PIN, 0);
+}
+
+float calculaDistancia(void) {
+    while (espera) {
+        __asm("nop");
+    }
+    if (tick_descida > tick_subida) {
+        tick = tick_descida - tick_subida;
+        t = tick / 3;
+        dist = t * 0.017f;
+    }
+    else {
+        tick = 65536 - (tick_subida - tick_descida);
+        t = tick / 3;
+        dist = t * 0.017f;
+    }
+    espera = true;
     return dist;
 }

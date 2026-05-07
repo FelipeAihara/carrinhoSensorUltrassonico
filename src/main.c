@@ -5,11 +5,11 @@
 #include <sensor-ultrassonico.h>
 
 #define TPM_MODULE 1000         // Define a frequência do PWM fpwm = (TPM_CLK / (TPM_MODULE * PS))
-#define SLEEP_TIME_MS 1000
-
 
 int main(void) {
     float distancia;
+    bool menor, maior;
+
     sensorUltrassonicoInit();
 
     // Configura os motores
@@ -20,20 +20,28 @@ int main(void) {
     pwm_tpm_Ch_Init(TPM0, 5, TPM_PWM_H,GPIOD,5);
 
     while (1) {
+        trigger();
         distancia = calculaDistancia();
-        printk("Distancia: %f\n", distancia);
-        k_msleep(1000); 
 
-        if (distancia > 25) {
-            pwm_tpm_CnV(TPM0, 3, 700);
-            pwm_tpm_CnV(TPM0, 2, 0);
-            pwm_tpm_CnV(TPM0, 0, 700);
-            pwm_tpm_CnV(TPM0, 5, 0);
-        }
-        else {
+        maior = distancia > 20 - 2;
+        menor = distancia < 20 + 5;
+
+        if (maior && menor) {
             pwm_tpm_CnV(TPM0, 3, 0);
             pwm_tpm_CnV(TPM0, 2, 0);
             pwm_tpm_CnV(TPM0, 0, 0);
+            pwm_tpm_CnV(TPM0, 5, 0);
+        }
+        else if (!menor) {
+            pwm_tpm_CnV(TPM0, 3, 0); // Esquerda
+            pwm_tpm_CnV(TPM0, 2, 750); //
+            pwm_tpm_CnV(TPM0, 0, 0); // Direita
+            pwm_tpm_CnV(TPM0, 5, 700); //
+        }
+        else {
+            pwm_tpm_CnV(TPM0, 3, 750);
+            pwm_tpm_CnV(TPM0, 2, 0);
+            pwm_tpm_CnV(TPM0, 0, 700);
             pwm_tpm_CnV(TPM0, 5, 0);
         }
     }
